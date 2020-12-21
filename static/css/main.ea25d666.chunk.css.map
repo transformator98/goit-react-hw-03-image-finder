@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/App.module.css"],"names":[],"mappings":"AAAA,gBACE,YAAa,CACb,yBAA0B,CAC1B,aAAc,CACd,mBACF","file":"main.ea25d666.chunk.css","sourcesContent":[".App {\n  display: grid;\n  grid-template-columns: 1fr;\n  grid-gap: 16px;\n  padding-bottom: 24px;\n}\n"]}
