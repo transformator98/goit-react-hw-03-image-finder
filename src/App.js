@@ -20,7 +20,6 @@ export default class App extends Component {
     return (
       <div className={s.app}>
         <Searchbar onSubmit={this.handleFormSubmit} />
-
         <ImageGallery imageName={this.state.imageName} />
         <ToastContainer autoClose={3000} />
       </div>

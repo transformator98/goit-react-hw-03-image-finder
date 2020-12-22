@@ -17,6 +17,7 @@ export default class ImageGallery extends Component {
 
     if (prevName !== nextName) {
       this.setState({ loading: true });
+
       fetch(
         `https://pixabay.com/api/?q=${nextName}&page=1&key=18773643-f1542c573d467a3c4fb890edb&image_type=photo&orientation=horizontal&per_page=12`,
       )
@@ -24,6 +25,14 @@ export default class ImageGallery extends Component {
         .then(({ hits }) => this.setState({ hits }))
         // .then(console.log)
         .finally(() => this.setState({ loading: false }));
+
+      //   fetch(
+      //     `https://pixabay.com/api/?q=${nextName}&page=1&key=18773643-f1542c573d467a3c4fb890edb&image_type=photo&orientation=horizontal&per_page=12`,
+      //   )
+      //     .then(res => res.json())
+      //     .then(({ hits }) => this.setState({ hits }))
+      //     // .then(console.log)
+      //     .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -35,7 +44,7 @@ export default class ImageGallery extends Component {
         {loading && (
           <Loader
             className={s.loader}
-            type="Puff"
+            type="Circles"
             color="#3ccf9e"
             height={100}
             width={100}
