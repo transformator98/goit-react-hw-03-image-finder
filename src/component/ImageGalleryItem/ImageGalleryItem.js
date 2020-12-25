@@ -1,13 +1,15 @@
 import s from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({ hits }) {
+export default function ImageGalleryItem({
+  key = 1,
+  webformatURL = 'http://placehold.it/600x400',
+  largeImageURL = 'http://placehold.it/600x400',
+  id = 1,
+}) {
   return (
-    <>
-      {hits.map((hit, index) => (
-        <li key={index} className={s.imageGalleryItem}>
-          <img src={hit.webformatURL} alt={hit.id} className={s.image} />
-        </li>
-      ))}
-    </>
+    <li key={key} className={s.imageGalleryItem}>
+      <img src={webformatURL} alt={id} className={s.image} />
+      {/* <img src={largeImageURL} alt={id} className={s.image} /> */}
+    </li>
   );
 }
