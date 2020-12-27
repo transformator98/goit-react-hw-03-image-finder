@@ -1,15 +1,20 @@
 import s from './ImageGalleryItem.module.css';
 
 export default function ImageGalleryItem({
-  key = 1,
-  webformatURL = 'http://placehold.it/600x400',
-  largeImageURL = 'http://placehold.it/600x400',
-  id = 1,
+  webformatURL = 'https://picsum.photos/600/400',
+  largeImageURL = 'https://picsum.photos/600/400',
+  tags,
+  imageClick,
 }) {
   return (
-    <li key={key} className={s.imageGalleryItem}>
-      <img src={webformatURL} alt={id} className={s.image} />
-      {/* <img src={largeImageURL} alt={id} className={s.image} /> */}
+    <li className={s.imageGalleryItem}>
+      <img
+        src={webformatURL}
+        data-sourse={largeImageURL}
+        alt={tags}
+        className={s.image}
+        onClick={imageClick}
+      />
     </li>
   );
 }

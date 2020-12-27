@@ -4,8 +4,6 @@ import Loader from 'react-loader-spinner';
 import ImageGalleryItem from '../ImageGalleryItem';
 
 export default function ImagePendingView() {
-  const images = { webformatURL: 'http://placehold.it/600x400' };
-
   return (
     <>
       <Loader
@@ -17,7 +15,11 @@ export default function ImagePendingView() {
       />
       <>
         <ul className={stules.imageGallery}>
-          <ImageGalleryItem webformatURL={images} />
+          {Array(12)
+            .fill()
+            .map((item, index) => (
+              <ImageGalleryItem key={index} />
+            ))}
         </ul>
       </>
     </>

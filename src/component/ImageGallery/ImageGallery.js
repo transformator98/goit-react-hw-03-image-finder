@@ -1,10 +1,9 @@
 import { Component } from 'react';
-// import Loader from 'react-loader-spinner';
+import Button from '../Button';
 import ImageErrorView from './ImageErrorView';
 import ImagePendingView from '../Loader/';
-
 // import { toast } from 'react-toastify';
-
+import galleryAPI from '../../services/imageGallery-api';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
 
@@ -17,7 +16,9 @@ const Status = {
 
 export default class ImageGallery extends Component {
   state = {
-    hits: null,
+    page: 1,
+    total: null,
+    hits: [],
     error: null,
     status: Status.IDLE,
   };
@@ -26,47 +27,47 @@ export default class ImageGallery extends Component {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
 
-    if (prevName !== nextName) {
+    if (prevName !== nextName || prevProps.page !== this.props.page) {
       this.setState({ status: Status.PENDING });
-
-      setTimeout(() => {
-        fetch(
-          `https://pixabay.com/api/?q=${nextName}&page=1&key=18773643-f1542c573d467a3c4fb890edb&image_type=photo&orientation=horizontal&per_page=12`,
+      console.log('prevState', prevState.hits);
+      console.log('hits', this.state.hits);
+      // setTimeout(() => {
+      //   galleryAPI
+      //     .fetchGallery(nextName)
+      //     .then(({ hits }) => this.setState({ hits, status: Status.RESOLVED }))
+      //     .catch(error => this.setState({ error, status: Status.REJECTED }));
+      // }, 5000);
+      galleryAPI
+        .fetchGallery(nextName)
+        .then(({ hits, total, page }) =>
+          this.setState({
+            hits: [...prevState.hits, ...hits],
+            total,
+            status: Status.RESOLVED,
+          }),
         )
-          .then(response => {
-            if (response.ok) {
-              return response.json();
-            }
-            return Promise.reject(
-              new Error(`Нет картинок по запросу ${nextName}`),
-            );
-          })
-          .then(({ hits }) => this.setState({ hits, status: Status.RESOLVED }))
-          .catch(error => this.setState({ error, status: Status.REJECTED }));
-      }, 15000);
+        .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
   }
+  onLoadMore = () => {
+    const { page, imageName } = this.props;
+    galleryAPI.fetchGallery(imageName, page).then(({ page }) => {
+      this.setState(({ page }) => ({
+        page: page + 1,
+      }));
+    });
+  };
 
   render() {
-    const { hits, error, status } = this.state;
+    const { hits, total, error, status } = this.state;
+    const { largeURL } = this.props;
 
     if (status === 'idle') {
-      return <p>Введите текст для поиска</p>;
+      return <div className={s.text}>Введите текст для поиска</div>;
     }
 
     if (status === 'pending') {
-      return (
-        <ImagePendingView />
-
-        // <Loader
-        //   className={s.loader}
-        //   type="Circles"
-        //   color="#3ccf9e"
-        //   height={100}
-        //   width={100}
-        //   // timeout={4000} //4 secs
-        // />
-      );
+      return <ImagePendingView />;
     }
 
     if (status === 'rejected') {
@@ -75,25 +76,22 @@ export default class ImageGallery extends Component {
 
     if (status === 'resolved') {
       return (
-        <ul className={s.imageGallery}>
-          {hits.map((hit, index) => (
-            <ImageGalleryItem
-              key={index}
-              webformatURL={hit.webformatURL}
-              largeImageURL={hit.largeImageURL}
-              id={hit.id}
-            />
-          ))}
-        </ul>
+        <>
+          <ul className={s.imageGallery}>
+            {hits.map((hit, index) => (
+              <ImageGalleryItem
+                key={index}
+                webformatURL={hit.webformatURL}
+                largeImageURL={hit.largeImageURL}
+                tags={hit.tags}
+                imageClick={largeURL}
+              />
+            ))}
+          </ul>
+
+          {total > 11 && <Button onClick={this.onLoadMore} />}
+        </>
       );
     }
-    // return (
-    //   <ul className={s.imageGallery}>
-    //     {error && <h1>{error.message} </h1>}
-
-    //     {!imageName && 'Введите текст для поиска'}
-    //     {hits && <ImageGalleryItem hits={hits} />}
-    //   </ul>
-    // );
   }
 }
