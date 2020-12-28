@@ -6,6 +6,7 @@ import s from './Searchbar.module.css';
 export default class Searchbar extends Component {
   state = {
     imageName: '',
+    page: 1,
   };
   handleNameChange = event => {
     this.setState({ imageName: event.target.value.toLowerCase() });

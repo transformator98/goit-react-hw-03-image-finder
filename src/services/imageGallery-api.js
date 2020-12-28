@@ -1,8 +1,10 @@
 const apiKey = '18773643-f1542c573d467a3c4fb890edb';
 
-function fetchGallery(name, page = 1) {
+function fetchGallery(name, page) {
   const url = `https://pixabay.com/api/?q=${name}&page=${page}&key=${apiKey}&image_type=photo&orientation=horizontal&per_page=12`;
+
   return fetch(url).then(responce => {
+    console.log('API', page);
     if (responce.ok) {
       return responce.json();
     }

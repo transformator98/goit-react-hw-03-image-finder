@@ -26,36 +26,41 @@ export default class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
-
-    if (prevName !== nextName || prevProps.page !== this.props.page) {
+    // const prevPage = prevState.hits;
+    if (prevName !== nextName) {
       this.setState({ status: Status.PENDING });
-      console.log('prevState', prevState.hits);
-      console.log('hits', this.state.hits);
-      // setTimeout(() => {
-      //   galleryAPI
-      //     .fetchGallery(nextName)
-      //     .then(({ hits }) => this.setState({ hits, status: Status.RESOLVED }))
-      //     .catch(error => this.setState({ error, status: Status.REJECTED }));
-      // }, 5000);
+
+      console.log('prevState.hits', prevState.hits);
+      console.log('this.state.hits', this.state.hits);
+
       galleryAPI
-        .fetchGallery(nextName)
-        .then(({ hits, total, page }) =>
+        .fetchGallery(nextName, this.state.page)
+        .then(({ hits, total, page }) => {
           this.setState({
-            hits: [...prevState.hits, ...hits],
+            hits: [...this.state.hits, ...hits],
             total,
+            page: this.state.page + 1,
             status: Status.RESOLVED,
-          }),
-        )
+          });
+        })
         .catch(error => this.setState({ error, status: Status.REJECTED }));
     }
   }
   onLoadMore = () => {
-    const { page, imageName } = this.props;
-    galleryAPI.fetchGallery(imageName, page).then(({ page }) => {
-      this.setState(({ page }) => ({
-        page: page + 1,
-      }));
-    });
+    const { page } = this.state;
+    const { imageName } = this.props;
+
+    galleryAPI
+      .fetchGallery(imageName, page)
+      .then(({ hits, total }) => {
+        this.setState({
+          hits: [...this.state.hits, ...hits],
+          total,
+          page: page + 1,
+          status: Status.RESOLVED,
+        });
+      })
+      .catch(error => this.setState({ error, status: Status.REJECTED }));
   };
 
   render() {

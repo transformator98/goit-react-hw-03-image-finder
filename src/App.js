@@ -12,9 +12,12 @@ export default class App extends Component {
   state = {
     imageName: '',
     largeImageURL: '',
+    // page: 1,
+    // hits: [],
   };
 
   handleFormSubmit = imageName => {
+    // this.setState({ imageName, page: 1, hits: [] });
     this.setState({ imageName });
   };
   toggleModal = () => {
