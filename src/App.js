@@ -12,8 +12,8 @@ export default class App extends Component {
   state = {
     imageName: '',
     largeImageURL: '',
-    // page: 1,
-    // hits: [],
+    page: 1,
+    hits: [],
   };
 
   handleFormSubmit = imageName => {

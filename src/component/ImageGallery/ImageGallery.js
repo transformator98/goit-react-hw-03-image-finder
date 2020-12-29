@@ -28,7 +28,7 @@ export default class ImageGallery extends Component {
     const nextName = this.props.imageName;
     // const prevPage = prevState.hits;
     if (prevName !== nextName) {
-      this.setState({ status: Status.PENDING });
+      this.setState({ status: Status.PENDING, hits: [], page: 1 });
 
       console.log('prevState.hits', prevState.hits);
       console.log('this.state.hits', this.state.hits);

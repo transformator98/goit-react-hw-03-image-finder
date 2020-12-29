@@ -5,6 +5,7 @@ function fetchGallery(name, page) {
 
   return fetch(url).then(responce => {
     console.log('API', page);
+
     if (responce.ok) {
       return responce.json();
     }
