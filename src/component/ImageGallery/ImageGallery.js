@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Button from '../Button';
 import ImageErrorView from './ImageErrorView';
-import ImagePendingView from '../Loader/';
+import Loader from '../Loader';
 // import { toast } from 'react-toastify';
 import galleryAPI from '../../services/imageGallery-api';
 import s from './ImageGallery.module.css';
@@ -21,50 +21,53 @@ export default class ImageGallery extends Component {
     hits: [],
     error: null,
     status: Status.IDLE,
+    isLoading: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
-    // const prevPage = prevState.hits;
+    // this.scrollPage();
     if (prevName !== nextName) {
       this.setState({ status: Status.PENDING, hits: [], page: 1 });
 
-      console.log('prevState.hits', prevState.hits);
-      console.log('this.state.hits', this.state.hits);
+      this.fetchApiGallery();
+    }
+  }
 
+  scrollPage = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
+
+  fetchApiGallery = () => {
+    const { page } = this.state;
+    const { imageName } = this.props;
+    setTimeout(() => {
       galleryAPI
-        .fetchGallery(nextName, this.state.page)
-        .then(({ hits, total, page }) => {
+        .fetchGallery(imageName, page)
+        .then(({ hits, total }) => {
           this.setState({
             hits: [...this.state.hits, ...hits],
             total,
-            page: this.state.page + 1,
+            isLoading: false,
             status: Status.RESOLVED,
           });
+          this.scrollPage();
         })
         .catch(error => this.setState({ error, status: Status.REJECTED }));
-    }
-  }
-  onLoadMore = () => {
-    const { page } = this.state;
-    const { imageName } = this.props;
+    }, 2000);
+  };
 
-    galleryAPI
-      .fetchGallery(imageName, page)
-      .then(({ hits, total }) => {
-        this.setState({
-          hits: [...this.state.hits, ...hits],
-          total,
-          page: page + 1,
-          status: Status.RESOLVED,
-        });
-      })
-      .catch(error => this.setState({ error, status: Status.REJECTED }));
+  onLoadMore = () => {
+    this.setState({ isLoading: true });
+    this.fetchApiGallery();
   };
 
   render() {
-    const { hits, total, error, status } = this.state;
+    const { hits, error, status } = this.state;
     const { largeURL } = this.props;
 
     if (status === 'idle') {
@@ -72,7 +75,7 @@ export default class ImageGallery extends Component {
     }
 
     if (status === 'pending') {
-      return <ImagePendingView />;
+      return <Loader />;
     }
 
     if (status === 'rejected') {
@@ -94,7 +97,10 @@ export default class ImageGallery extends Component {
             ))}
           </ul>
 
-          {total > 11 && <Button onClick={this.onLoadMore} />}
+          {/* {(total > 11 && <Button onClick={this.onLoadMore} />)} */}
+
+          {this.state.isLoading && <Loader />}
+          {!this.state.isLoading && <Button onClick={this.onLoadMore} />}
         </>
       );
     }

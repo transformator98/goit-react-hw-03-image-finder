@@ -6,7 +6,6 @@ import s from './Searchbar.module.css';
 export default class Searchbar extends Component {
   state = {
     imageName: '',
-    page: 1,
   };
   handleNameChange = event => {
     this.setState({ imageName: event.target.value.toLowerCase() });
@@ -18,8 +17,14 @@ export default class Searchbar extends Component {
       toast.error('Введите текст для поиска');
       return;
     }
+    //     onSubmit(query) {
+    // setPage(1);
+    // setImages([])
+    // setQuery(query)
+    // }
 
-    this.props.onSubmit(this.state.imageName);
+    const { imageName } = this.state;
+    this.props.onSubmit(imageName);
     this.setState({ imageName: '' });
   };
 

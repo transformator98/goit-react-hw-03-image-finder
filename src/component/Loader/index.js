@@ -1,1 +1,1 @@
-export { default } from './ImagePendingView';
+export { default } from './Loader';

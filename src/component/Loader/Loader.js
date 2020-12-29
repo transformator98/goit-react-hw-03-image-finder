@@ -10,8 +10,8 @@ export default function ImagePendingView() {
         className={s.loader}
         type="Circles"
         color="#3ccf9e"
-        height={100}
-        width={100}
+        height={30}
+        width={30}
       />
       <>
         <ul className={stules.imageGallery}>
