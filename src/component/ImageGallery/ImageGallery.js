@@ -68,7 +68,7 @@ export default class ImageGallery extends Component {
   };
 
   render() {
-    const { hits, error, status } = this.state;
+    const { hits, error, status, total } = this.state;
     const { largeURL } = this.props;
 
     if (status === 'idle') {
@@ -86,22 +86,24 @@ export default class ImageGallery extends Component {
     if (status === 'resolved') {
       return (
         <>
-          <ul className={s.imageGallery}>
-            {hits.map((hit, index) => (
-              <ImageGalleryItem
-                key={index}
-                webformatURL={hit.webformatURL}
-                largeImageURL={hit.largeImageURL}
-                tags={hit.tags}
-                imageClick={largeURL}
-              />
-            ))}
-          </ul>
-
-          {/* {(total > 11 && <Button onClick={this.onLoadMore} />)} */}
+          {total > 1 && (
+            <ul className={s.imageGallery}>
+              {hits.map((hit, index) => (
+                <ImageGalleryItem
+                  key={index}
+                  webformatURL={hit.webformatURL}
+                  largeImageURL={hit.largeImageURL}
+                  tags={hit.tags}
+                  imageClick={largeURL}
+                />
+              ))}
+            </ul>
+          )}
 
           {this.state.isLoading && <Loader />}
-          {!this.state.isLoading && <Button onClick={this.onLoadMore} />}
+          {(total > 11) & !this.state.isLoading && (
+            <Button onClick={this.onLoadMore} />
+          )}
         </>
       );
     }

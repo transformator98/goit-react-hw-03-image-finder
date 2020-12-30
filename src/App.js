@@ -12,6 +12,7 @@ export default class App extends Component {
   state = {
     imageName: '',
     largeImageURL: '',
+    total: null,
   };
 
   handleFormSubmit = imageName => {
@@ -31,8 +32,9 @@ export default class App extends Component {
     }
 
     const largeURL = imagesClick.dataset.sourse;
-    this.setState(({ largeImageURL }) => ({
+    this.setState(({ largeImageURL, total }) => ({
       largeImageURL: largeURL,
+      total,
     }));
   };
 
@@ -42,7 +44,6 @@ export default class App extends Component {
     return (
       <div className={s.app}>
         <Searchbar onSubmit={this.handleFormSubmit} />
-
         <ImageGallery imageName={imageName} largeURL={this.largeImgModal} />
         {largeImageURL && (
           <Modal onClose={this.toggleModal}>
