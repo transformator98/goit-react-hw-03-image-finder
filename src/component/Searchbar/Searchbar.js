@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import s from './Searchbar.module.css';
 
@@ -17,11 +18,6 @@ export default class Searchbar extends Component {
       toast.error('Введите текст для поиска');
       return;
     }
-    //     onSubmit(query) {
-    // setPage(1);
-    // setImages([])
-    // setQuery(query)
-    // }
 
     const { imageName } = this.state;
     this.props.onSubmit(imageName);
@@ -50,3 +46,6 @@ export default class Searchbar extends Component {
     );
   }
 }
+Searchbar.propTypes = {
+  imageName: PropTypes.string,
+};

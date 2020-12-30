@@ -6,6 +6,7 @@ import Loader from '../Loader';
 import galleryAPI from '../../services/imageGallery-api';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
+import PropTypes from 'prop-types';
 
 const Status = {
   IDLE: 'idle',
@@ -27,7 +28,7 @@ export default class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     const prevName = prevProps.imageName;
     const nextName = this.props.imageName;
-    // this.scrollPage();
+
     if (prevName !== nextName) {
       this.setState({ status: Status.PENDING, hits: [], page: 1 });
 
@@ -45,20 +46,20 @@ export default class ImageGallery extends Component {
   fetchApiGallery = () => {
     const { page } = this.state;
     const { imageName } = this.props;
-    setTimeout(() => {
-      galleryAPI
-        .fetchGallery(imageName, page)
-        .then(({ hits, total }) => {
-          this.setState({
-            hits: [...this.state.hits, ...hits],
-            total,
-            isLoading: false,
-            status: Status.RESOLVED,
-          });
-          this.scrollPage();
-        })
-        .catch(error => this.setState({ error, status: Status.REJECTED }));
-    }, 2000);
+    // setTimeout(() => {
+    galleryAPI
+      .fetchGallery(imageName, page)
+      .then(({ hits, total }) => {
+        this.setState({
+          hits: [...this.state.hits, ...hits],
+          total,
+          isLoading: false,
+          status: Status.RESOLVED,
+        });
+        this.scrollPage();
+      })
+      .catch(error => this.setState({ error, status: Status.REJECTED }));
+    // }, 2000);
   };
 
   onLoadMore = () => {
@@ -106,3 +107,9 @@ export default class ImageGallery extends Component {
     }
   }
 }
+
+ImageGallery.propTypes = {
+  page: PropTypes.number,
+  hits: PropTypes.object,
+  largeImageURL: PropTypes.string,
+};

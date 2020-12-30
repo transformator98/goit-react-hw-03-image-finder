@@ -1,4 +1,5 @@
 import s from './ImageGalleryItem.module.css';
+import PropTypes from 'prop-types';
 
 export default function ImageGalleryItem({
   webformatURL = 'https://picsum.photos/600/400',
@@ -18,3 +19,9 @@ export default function ImageGalleryItem({
     </li>
   );
 }
+ImageGalleryItem.propTypes = {
+  tags: PropTypes.string,
+  webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
+  imageClick: PropTypes.func,
+};
