@@ -2,7 +2,7 @@ import { Component } from 'react';
 import Button from '../Button';
 import ImageErrorView from './ImageErrorView';
 import Loader from '../Loader';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import galleryAPI from '../../services/imageGallery-api';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
@@ -18,8 +18,8 @@ const Status = {
 export default class ImageGallery extends Component {
   state = {
     page: 1,
-    total: null,
     hits: [],
+
     error: null,
     status: Status.IDLE,
     isLoading: false,
@@ -49,14 +49,19 @@ export default class ImageGallery extends Component {
     // setTimeout(() => {
     galleryAPI
       .fetchGallery(imageName, page)
-      .then(({ hits, total }) => {
+
+      .then(({ hits }) => {
+        if (hits.length === 0) {
+          toast.error('По вашему запросу нет нужного результата!');
+        }
+
         this.setState({
           hits: [...this.state.hits, ...hits],
-          total,
           isLoading: false,
           status: Status.RESOLVED,
         });
         this.scrollPage();
+        this.props.images(hits);
       })
       .catch(error => this.setState({ error, status: Status.REJECTED }));
     // }, 2000);
@@ -68,7 +73,7 @@ export default class ImageGallery extends Component {
   };
 
   render() {
-    const { hits, error, status, total } = this.state;
+    const { hits, error, status } = this.state;
     const { largeURL } = this.props;
 
     if (status === 'idle') {
@@ -86,7 +91,7 @@ export default class ImageGallery extends Component {
     if (status === 'resolved') {
       return (
         <>
-          {total > 1 && (
+          {hits.length > 1 && (
             <ul className={s.imageGallery}>
               {hits.map((hit, index) => (
                 <ImageGalleryItem
@@ -101,7 +106,7 @@ export default class ImageGallery extends Component {
           )}
 
           {this.state.isLoading && <Loader />}
-          {(total > 11) & !this.state.isLoading && (
+          {(hits.length > 11) & !this.state.isLoading && (
             <Button onClick={this.onLoadMore} />
           )}
         </>
