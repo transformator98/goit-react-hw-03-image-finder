@@ -73,24 +73,23 @@ export default class App extends Component {
   fetchApiGallery = () => {
     const { page } = this.state;
     const { imageName } = this.state;
-    setTimeout(() => {
-      galleryAPI
-        .fetchGallery(imageName, page)
 
-        .then(({ hits, total }) => {
-          if (hits.length === 0) {
-            toast.error('По вашему запросу нет нужного результата!');
-          }
-          this.setState({
-            images: [...this.state.images, ...hits],
-            total,
-            isLoading: false,
-            status: Status.RESOLVED,
-          });
-          this.scrollPage();
-        })
-        .catch(error => this.setState({ error, status: Status.REJECTED }));
-    }, 5000);
+    galleryAPI
+      .fetchGallery(imageName, page)
+
+      .then(({ hits, total }) => {
+        if (hits.length === 0) {
+          toast.error('По вашему запросу нет нужного результата!');
+        }
+        this.setState({
+          images: [...this.state.images, ...hits],
+          total,
+          isLoading: false,
+          status: Status.RESOLVED,
+        });
+        this.scrollPage();
+      })
+      .catch(error => this.setState({ error, status: Status.REJECTED }));
   };
   scrollPage = () => {
     window.scrollTo({
