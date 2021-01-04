@@ -73,23 +73,24 @@ export default class App extends Component {
   fetchApiGallery = () => {
     const { page } = this.state;
     const { imageName } = this.state;
+    setTimeout(() => {
+      galleryAPI
+        .fetchGallery(imageName, page)
 
-    galleryAPI
-      .fetchGallery(imageName, page)
-
-      .then(({ hits, total }) => {
-        if (hits.length === 0) {
-          toast.error('По вашему запросу нет нужного результата!');
-        }
-        this.setState({
-          images: [...this.state.images, ...hits],
-          total,
-          isLoading: false,
-          status: Status.RESOLVED,
-        });
-        this.scrollPage();
-      })
-      .catch(error => this.setState({ error, status: Status.REJECTED }));
+        .then(({ hits, total }) => {
+          if (hits.length === 0) {
+            toast.error('По вашему запросу нет нужного результата!');
+          }
+          this.setState({
+            images: [...this.state.images, ...hits],
+            total,
+            isLoading: false,
+            status: Status.RESOLVED,
+          });
+          this.scrollPage();
+        })
+        .catch(error => this.setState({ error, status: Status.REJECTED }));
+    }, 5000);
   };
   scrollPage = () => {
     window.scrollTo({
@@ -121,7 +122,7 @@ export default class App extends Component {
         )}
         {status === 'pending' && <Loader />}
         {status === 'rejected' && <ImageErrorView message={error.message} />}
-        {(total > 1) & (status === 'resolved') && (
+        {total > 1 && status === 'resolved' && (
           <ImageGallery images={images} largeURL={this.largeImgModal} />
         )}
         {largeImageURL && (
@@ -129,8 +130,8 @@ export default class App extends Component {
             <img src={largeImageURL} alt={imageName} />
           </Modal>
         )}
-        {/* {this.state.isLoading && <Loader />} */}
-        {(total > images.length) & !this.state.isLoading && (
+        {this.state.isLoading && <Loader />}
+        {total > images.length && !this.state.isLoading && (
           <Button onClick={this.onLoadMore} />
         )}
         <ToastContainer autoClose={3000} />

@@ -31,7 +31,6 @@ export default class Searchbar extends Component {
           <button type="submit" className={s.button}>
             <span className={s.label}>Search</span>
           </button>
-
           <input
             value={this.state.imageName}
             onChange={this.handleNameChange}

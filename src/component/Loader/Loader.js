@@ -2,6 +2,7 @@ import s from './Loader.module.css';
 import stules from '../ImageGallery/ImageGallery.module.css';
 import Loader from 'react-loader-spinner';
 import ImageGalleryItem from '../ImageGalleryItem';
+import pendingImage from './pending.png';
 
 export default function ImagePendingView() {
   return (
@@ -18,7 +19,11 @@ export default function ImagePendingView() {
           {Array(12)
             .fill()
             .map((item, index) => (
-              <ImageGalleryItem key={index} />
+              <ImageGalleryItem
+                key={index}
+                webformatURL={pendingImage}
+                largeImageURL={pendingImage}
+              />
             ))}
         </ul>
       </>
