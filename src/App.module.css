@@ -1,8 +1,12 @@
 .app {
   display: grid;
   grid-template-columns: 1fr;
-
   grid-area: a;
   grid-gap: 16px;
   /* padding-bottom: 24px; */
 }
+
+/* .text {
+  text-align: center;
+  font-size: 24px;
+} */

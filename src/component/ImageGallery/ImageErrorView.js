@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
 
 export default function ImageErrorView({ message }) {
-  return toast.error(`hello${message}`);
+  return toast.error(`${message}`);
 }

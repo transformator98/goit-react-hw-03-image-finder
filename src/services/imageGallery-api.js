@@ -1,10 +1,11 @@
 const apiKey = '18773643-f1542c573d467a3c4fb890edb';
 
 const api = {
-  seaechQuerry: '',
+  // seaechQuerry: '',
   page: 1,
 
   fetchGallery(name) {
+    console.log('fetch name', name);
     const url = `https://pixabay.com/api/?q=${name}&page=${this.page}&key=${apiKey}&image_type=photo&orientation=horizontal&per_page=12`;
 
     return fetch(url).then(responce => {
