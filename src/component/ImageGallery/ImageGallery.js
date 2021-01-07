@@ -19,7 +19,11 @@ const ImageGallery = ({ images, largeURL }) => {
 };
 
 ImageGallery.propTypes = {
-  images: PropTypes.array,
-  largeImageURL: PropTypes.string,
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      index: PropTypes.number.isRequired,
+    }),
+  ),
+  largeURL: PropTypes.string,
 };
 export default ImageGallery;
